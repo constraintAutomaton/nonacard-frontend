@@ -5,7 +5,8 @@
   "private": true,
   "main": "./js/main.js",
   "scripts": {
-    "start": "webpack --watch --config webpack.config.js"
+    "start": "webpack --config webpack.config.js && sass sass:css",
+    "dev": "concurrently  \"webpack --watch --config webpack.config.js\" \"sass --watch sass:css\" "
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "concurrently": "^5.1.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10"
   }
