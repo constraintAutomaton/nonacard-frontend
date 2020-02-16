@@ -1,5 +1,5 @@
 {
-  "name": "nonaCard",
+  "name": "nonacard",
   "version": "1.0.0",
   "description": "",
   "private": true,
@@ -22,7 +22,18 @@
     "@babel/preset-env": "^7.8.4",
     "babel-loader": "^8.0.6",
     "concurrently": "^5.1.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.7",
+    "prettier": "1.19.1",
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.10"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }
