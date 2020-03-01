@@ -15,43 +15,37 @@ export default class AnimeCard extends HTMLElement {
     linkElem.setAttribute("rel", "stylesheet");
     linkElem.setAttribute("href", "static/css/animeCard.css");
     this.container = document.createElement("div");
-    this.container.classList.add("container");
-    this.container.draggable = true;
-    this.container.innerHTML = `
-    <div id="info">
-      <img class="option-card" alt="options" src="static/images/gear.svg"/>
-    <div>
-    `;
+    this.setContainer();
+
+    if (this.hasAttribute("controllerId")) {
+      this.controllerId = this.getAttribute("controllerId");
+    } else {
+      this.controllerId = null;
+    }
+
     shadow.appendChild(linkElem);
     shadow.appendChild(this.container);
 
-    this.container.querySelector("#info").onclick = this.ShowForm.bind(this);
-
-    this.ondragstart = this.dragstart_handler;
-    this.ondrop = this.drop_handler;
-    this.ondragover = this.dragover_handler;
-    this.ondragend = this.dragend_handler;
+    this.setDragAndDrop();
   }
   connectedCallback() {
     this.setAttribute("data", JSON.stringify({ card: this.id }));
   }
-  async ShowForm() {
-    const cards = Array.from(document.querySelectorAll("anime-card"));
-    cards.forEach(card => {
-      if (card.id != this.id) {
-        card.setAttribute("selected", "false");
-      }
-    });
+  selectCard() {
     this.container.classList.add("card-selected");
-    const cardForm = document.querySelector("card-form");
     this.setAttribute("selected", "true");
-    cardForm.setAttribute("card", this.id);
+    this.noticeControllerCardSelected();
   }
+  noticeControllerCardSelected() {
+    const controller = document.getElementById(this.controllerId);
+    controller.setAttribute("card", this.id);
+  }
+
   attributeChangedCallback(name, oldValue, newValue) {
     switch (name) {
       case "data": {
         if (newValue !== "{}") {
-          this.applyChanges();
+          this.applyChangesAttribute();
         }
         break;
       }
@@ -59,21 +53,28 @@ export default class AnimeCard extends HTMLElement {
         if (newValue === "false") {
           this.container.classList.remove("card-selected");
         }
+        break;
       }
     }
   }
-  applyChanges() {
+  applyChangesAttribute() {
     const data = JSON.parse(this.getAttribute("data"));
     if ("coverImage" in data) {
-      const image = data["coverImage"]["large"];
-      const container = this.container;
-      container.style.backgroundImage = `url(${image})`;
-      container.style.boxShadow = `2px 2px 2px ${data["coverImage"]["color"]}`;
+      this.addImage(data);
     } else {
-      const container = this.container;
-      container.style.backgroundImage = "";
-      container.style.boxShadow = "2px 2px 2px black";
+      this.emptyImage();
     }
+  }
+  addImage(data) {
+    const image = data["coverImage"]["large"];
+    const container = this.container;
+    container.style.backgroundImage = `url(${image})`;
+    container.style.boxShadow = `2px 2px 2px ${data["coverImage"]["color"]}`;
+  }
+  emptyImage() {
+    const container = this.container;
+    container.style.backgroundImage = "";
+    container.style.boxShadow = "2px 2px 2px black";
   }
   dragstart_handler(ev) {
     //ev.preventDefault();
@@ -105,6 +106,22 @@ export default class AnimeCard extends HTMLElement {
   }
   dragend_handler() {
     this.style.opacity = "1";
+  }
+  setDragAndDrop() {
+    this.ondragstart = this.dragstart_handler;
+    this.ondrop = this.drop_handler;
+    this.ondragover = this.dragover_handler;
+    this.ondragend = this.dragend_handler;
+  }
+  setContainer() {
+    this.container.classList.add("container");
+    this.container.draggable = true;
+    this.container.innerHTML = `
+    <div id="info">
+      <img class="option-card" alt="opt   ions" src="static/images/gear.svg"/>
+    <div>
+    `;
+    this.container.querySelector("#info").onclick = this.selectCard.bind(this);
   }
 }
 customElements.define("anime-card", AnimeCard);
