@@ -20,7 +20,8 @@ export const load = () => {
     arrayCard.forEach(el => {
       el.setAttribute('data', data['card'][el.id]);
     });
+    document.getElementById('3x3-name').value = data['name3x3'];
+    document.querySelector('#user').value = data['username'];
   }
-  document.getElementById('3x3-name').value = data['name3x3'];
-  document.querySelector('#user').value = data['username'];
+ 
 };

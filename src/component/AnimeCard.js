@@ -14,7 +14,8 @@ export default class AnimeCard extends HTMLElement {
     const linkElem = document.createElement("link");
     linkElem.setAttribute("rel", "stylesheet");
     linkElem.setAttribute("href", "static/css/animeCard.css");
-    this._setContainer.bind(this);
+    this.container = document.createElement("div");
+    this.setContainer();
 
     if (this.hasAttribute("controllerId")) {
       this.controllerId = this.getAttribute("controllerId");
@@ -25,7 +26,7 @@ export default class AnimeCard extends HTMLElement {
     shadow.appendChild(linkElem);
     shadow.appendChild(this.container);
 
-    this._setDragAndDrop.bind(this);
+    this.setDragAndDrop();
   }
   connectedCallback() {
     this.setAttribute("data", JSON.stringify({ card: this.id }));
@@ -33,9 +34,9 @@ export default class AnimeCard extends HTMLElement {
   selectCard() {
     this.container.classList.add("card-selected");
     this.setAttribute("selected", "true");
-    this._noticeControllerCardSelected();
+    this.noticeControllerCardSelected();
   }
-  _noticeControllerCardSelected() {
+  noticeControllerCardSelected() {
     const controller = document.getElementById(this.controllerId);
     controller.setAttribute("card", this.id);
   }
@@ -59,12 +60,12 @@ export default class AnimeCard extends HTMLElement {
   applyChangesAttribute() {
     const data = JSON.parse(this.getAttribute("data"));
     if ("coverImage" in data) {
-      this._addImage();
+      this.addImage(data);
     } else {
-      emptyImage();
+      this.emptyImage();
     }
   }
-  _addImage() {
+  addImage(data) {
     const image = data["coverImage"]["large"];
     const container = this.container;
     container.style.backgroundImage = `url(${image})`;
@@ -106,14 +107,13 @@ export default class AnimeCard extends HTMLElement {
   dragend_handler() {
     this.style.opacity = "1";
   }
-  _setDragAndDrop() {
+  setDragAndDrop() {
     this.ondragstart = this.dragstart_handler;
     this.ondrop = this.drop_handler;
     this.ondragover = this.dragover_handler;
     this.ondragend = this.dragend_handler;
   }
-  _setContainer() {
-    this.container = document.createElement("div");
+  setContainer() {
     this.container.classList.add("container");
     this.container.draggable = true;
     this.container.innerHTML = `

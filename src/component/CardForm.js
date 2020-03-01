@@ -13,7 +13,8 @@ export default class CardForm extends HTMLElement {
     linkElem.setAttribute("href", "static/css/cardForm.css");
 
     this.apiEngine = new ApiInterface();
-    this._setContainer.bind(this);
+    this.container = document.createElement("div");
+    this.setContainer();
 
     shadow.appendChild(linkElem);
     shadow.appendChild(this.container);
@@ -24,10 +25,8 @@ export default class CardForm extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     switch (name) {
       case "card": {
-        this._unSelectAllCard();
-        // don't show if clicked again
+        this.unSelectAllCard();
         if (oldValue === newValue || newValue === "null") {
-          this.container.style.opacity = "0";
           if (newValue !== "null") {
             this.exitForm();
           }
@@ -47,21 +46,27 @@ export default class CardForm extends HTMLElement {
     if (query != "") {
       const data = await this.apiEngine.searchAnime(query);
       data.forEach(el => {
-        const result = document.createElement("div");
-        const title =
-          el.title.english != null ? el.title.english : el.title.romaji;
-        result.innerHTML = `<span class="result">${title}<span>`;
-        // set the select anime in the card
-        result.querySelector(".result").onclick = () => {
-          const card = document.querySelector(`#${this.getAttribute("card")}`);
-          el["card"] = this.getAttribute("card");
-          card.setAttribute("data", JSON.stringify(el));
-        };
-        resultSection.appendChild(result);
+        const resultLine = this.createResultLine(el);
+        resultLine.querySelector(
+          ".result"
+        ).onclick = this.changeDataOfCurrentCard.bind(this,el);
+        resultSection.appendChild(resultLine);
       });
     } else {
       this.emptyResult();
     }
+  }
+  createResultLine(data) {
+    const result = document.createElement("div");
+    const title =
+      data.title.english != null ? data.title.english : data.title.romaji;
+    result.innerHTML = `<span class="result">${title}<span>`;
+    return result;
+  }
+  changeDataOfCurrentCard(data) {
+    const card = document.querySelector(`#${this.getAttribute("card")}`);
+    data["card"] = this.getAttribute("card");
+    card.setAttribute("data", JSON.stringify(data));
   }
   emptyResult() {
     const resultSection = this.container.querySelector(".results");
@@ -69,11 +74,12 @@ export default class CardForm extends HTMLElement {
     this.container.querySelector("input").value = "";
   }
   exitForm() {
+    this.container.style.opacity = "0";
     const card = document.getElementById(this.getAttribute("card"));
     card.setAttribute("selected", "false");
     this.setAttribute("card", null);
   }
-  _unSelectAllCard() {
+  unSelectAllCard() {
     const cards = Array.from(document.querySelectorAll("anime-card"));
     cards.forEach(card => {
       if (card.id != this.id) {
@@ -81,8 +87,7 @@ export default class CardForm extends HTMLElement {
       }
     });
   }
-  _setContainer() {
-    this.container = document.createElement("div");
+  setContainer() {
     this.container.classList.add("container");
     this.container.innerHTML = `
     <div class="form">
