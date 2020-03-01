@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import './component/AnimeCard.js';
 import './component/CardForm.js';
-//import { data } from "./util/user";
 import { save, load } from './util/util.js';
 
 const cardsElement = Array.from(document.querySelectorAll('.card'));
