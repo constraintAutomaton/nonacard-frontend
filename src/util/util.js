@@ -1,27 +1,25 @@
-export const save = () => {
-  const arrayCard = Array.from(document.querySelectorAll("anime-card"));
-  const data = { card: {} };
-  for (const el of arrayCard) {
-    data["card"][el.id] = el.getAttribute("data");
-  }
-  const name3x3 = document.getElementById("3x3-name").value;
-  const username = document.querySelector("#user").value;
+export const save = (cards, name3x3, username, storage) => {
+  const data = getCardData(cards);
   data["name3x3"] = name3x3;
   data["username"] = username;
-  const myStorage = window.localStorage;
-  myStorage.setItem("data", JSON.stringify(data));
+  storage.setItem("data", JSON.stringify(data));
 };
 
-export const load = () => {
-  const myStorage = window.localStorage;
-
-  const arrayCard = Array.from(document.querySelectorAll("anime-card"));
-  const data = JSON.parse(myStorage.getItem("data"));
+const getCardData = cards => {
+  const data = {};
+  data.card = {};
+  cards.forEach(el => {
+    data.card[el.id] = el.getAttribute("data");
+  });
+  return data;
+};
+export const load = (card, name3x3Element, userNameElement, storage) => {
+  const data = JSON.parse(storage.getItem("data"));
   if (data !== null) {
-    arrayCard.forEach(el => {
+    card.forEach(el => {
       el.setAttribute("data", data["card"][el.id]);
     });
-    document.getElementById("3x3-name").value = data["name3x3"];
-    document.querySelector("#user").value = data["username"];
+    name3x3Element.value = data["name3x3"];
+    userNameElement.value = data["username"];
   }
 };
