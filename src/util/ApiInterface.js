@@ -1,3 +1,4 @@
+'use strict';
 export default class ApiInterface {
   constructor() {
     const _rootUrl = `${window.location.href}/api/v1/`;

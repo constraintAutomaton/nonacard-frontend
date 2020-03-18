@@ -1,4 +1,4 @@
-
+'use strict';
 export default class AnimeCard extends HTMLElement {
   static get observedAttributes() {
     return ["data", "selected"];

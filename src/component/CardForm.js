@@ -1,3 +1,4 @@
+'use strict';
 import ApiInterface from "./../util/ApiInterface.js";
 export default class CardForm extends HTMLElement {
   static get observedAttributes() {

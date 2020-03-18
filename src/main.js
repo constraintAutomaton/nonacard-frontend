@@ -1,3 +1,4 @@
+'use strict';
 import _ from "lodash";
 import "./component/AnimeCard.js";
 import "./component/CardForm.js";

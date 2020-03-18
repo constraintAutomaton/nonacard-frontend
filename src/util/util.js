@@ -2,7 +2,8 @@ export const save = (cards, name3x3, username, storage) => {
   const data = getCardData(cards);
   data["name3x3"] = name3x3;
   data["username"] = username;
-  storage.setItem("data", JSON.stringify(data));
+  const stringJson = JSON.stringify(data);
+  storage.setItem("data", stringJson);
 };
 
 const getCardData = cards => {
