@@ -14,13 +14,15 @@ const getCardData = cards => {
   });
   return data;
 };
-export const load = (card, name3x3Element, userNameElement, storage) => {
+export const load = (cards, name3x3Element, userNameElement, storage) => {
   const data = JSON.parse(storage.getItem("data"));
   if (data !== null) {
-    card.forEach(el => {
+    cards.forEach(el => {
       el.setAttribute("data", data["card"][el.id]);
+      name3x3Element.value = data["name3x3"];
+      userNameElement.value = data["username"];
     });
-    name3x3Element.value = data["name3x3"];
-    userNameElement.value = data["username"];
+    return true;
   }
+  return false;
 };
