@@ -19,9 +19,9 @@ export const load = (cards, name3x3Element, userNameElement, storage) => {
   if (data !== null) {
     cards.forEach(el => {
       el.setAttribute("data", data["card"][el.id]);
-      name3x3Element.value = data["name3x3"];
-      userNameElement.value = data["username"];
     });
+    name3x3Element.value = data["name3x3"];
+    userNameElement.value = data["username"];
     return true;
   }
   return false;

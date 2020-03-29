@@ -105,22 +105,11 @@ describe("test the function of util", () => {
       });
 
       [storage, spySetItemStorage] = makeStorage(JSON.stringify(expectedValue));
-
       const [name3x3, spy3x3] = makeElement();
       const [username, spyUsename] = makeElement();
-
       const haveLoad = load(cards, name3x3, username, storage);
-/** 
       expect(haveLoad).to.be.true;
-      
-      expect(spy3x3.set.calledOnce).to.be.true;
-       
-      expect(spyUsename.set.calledOnce).to.be.true;
-      expect(spySetItemStorage.calledOnce).to.be.true;
-      cards.forEach(el => {
-        expect(el.setAttribute.calledOnce).to.be.true;
-      });
-      */
+
     });
   });
 });

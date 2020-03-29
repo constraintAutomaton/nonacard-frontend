@@ -8,7 +8,7 @@ export const makeCard = (id, attribute) => {
     .withArgs("data")
     .returns(attribute);
   sinon.stub(card, "id").value(id);
-  sinon.stub(card, "setAttribute").callThrough();
+  sinon.stub(card, "setAttribute").callThrough().returns(true);
   return card;
 };
 export const makeStorage = (storedValue = null) => {
@@ -27,10 +27,10 @@ export const makeStorage = (storedValue = null) => {
 export const makeElement = () => {
   const element = {
     get value() {
-      return this.value;
+      return this._value;
     },
-    set value(value) {
-      this.value = value;
+    set value(_value) {
+      this._value = _value;
     }
   };
   const spy = sinon.spy(element, "value", ["get", "set"]);
