@@ -1,8 +1,4 @@
-import "./CardForm.js";
-/**
- * AnimeCard
- * Html tag that show anime card
- */
+'use strict';
 export default class AnimeCard extends HTMLElement {
   static get observedAttributes() {
     return ["data", "selected"];
@@ -118,7 +114,7 @@ export default class AnimeCard extends HTMLElement {
     this.container.draggable = true;
     this.container.innerHTML = `
     <div id="info">
-      <img class="option-card" alt="opt   ions" src="static/images/gear.svg"/>
+      <img class="option-card" alt="options" src="static/images/gear.svg"/>
     <div>
     `;
     this.container.querySelector("#info").onclick = this.selectCard.bind(this);
